@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>WP4-082021</title>
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+<style type="text/css">
+html { overflow: hidden; }
+body { overflow: hidden; padding: 0; margin: 0;
+width: 100%; height: 100%; font-family: Trebuchet MS, Trebuchet, Arial, sans-serif; }
+#map { position: absolute; top: 10px; left: 10px; right: 10px; bottom: 15px; overflow: auto; }
+#floating-panel {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        z-index: 5;
+        background-color: #fff;
+        padding: 10px;
+        border: 1px solid #999;
+        text-align: left;
+        font-family: 'Roboto','sans-serif';
+        font-size: 12px;
+      }
+#footer { position: absolute; bottom: 0px; left: 0px; width:100%; height: 12px; overflow: hidden; }
+@media screen and (max-width: 600px) {
+  #map { top:0px; left:0px; width:100%; height:100%;}
+}
+body { background: #f4f4f4;}
+#header { background: #fff; box-shadow: 0 1px 3px #CCC; border: 1px solid #ccc; }
+#header h1 { padding:7px 10px; margin:0; font-size: 28px; }
+#map { border: 1px solid #ccc; box-shadow: 0 1px 3px #CCC; background-color: #DEDCD7;}
+#footer { text-align:center; font-size:9px; color:#606060; }
+</style>
+<!--[if lte IE 6]>
+<style type="text/css">
+#map {
+    height:expression(document.body.clientHeight-35); /* 10+10+15=35 */
+    width:expression(document.body.clientWidth-20); /* 10+10=20 */
+}
+</style>
+<![endif]-->
+
+</head>
+
+<body>
+    <div id="floating-panel">
+      <input type="radio" name="date" value="WP4-072021" onclick="toggleOverlay(this)" /> WP4-072021<br />
+      <input type="radio" name="date" value="WP4-082021" onclick="toggleOverlay(this)"/> WP4-082021<br />
+      <input type="radio" name="date" value="WP4-092021" onclick="toggleOverlay(this)"/> WP4-092021<br />
+  </div>
+
+<div id="footer"><a href="https://www.maptiler.com/engine/">Rendered with MapTiler Engine</a>, non-commercial use only</div>
+<div id="map"></div>
+
+<script type="text/javascript">
+var map;
+var maptiler;
+
+var mapMinZoom = 16;
+var mapMaxZoom = 21;
+
+function init() {
+    var opts = {
+        tilt:0,
+        streetViewControl: false,
+        center: new google.maps.LatLng(-6.258630, 106.920371),
+        zoom: 16
+    };
+    map = new google.maps.Map(document.getElementById("map"), opts);
+    
+    maptiler = new google.maps.ImageMapType({
+        getTileUrl: function(coord, zoom) {
+            ret = window.location.pathname;
+            ret = ret.substring(1);
+            ret = ret.split("/");
+            ret.pop();
+            ret = ret.join("/")
+            ret = ret + "/WP4-072021/" + zoom + "/" + coord.x + "/" + coord.y + ".png";
+            console.log(ret)
+            return ret
+           
+        },
+        tileSize: new google.maps.Size(256, 256)
+      });
+
+    map.setMapTypeId('satellite');
+    // map.overlayMapTypes.insertAt(0, maptiler);
+    map.overlayMapTypes.push(maptiler);
+}
+
+function toggleOverlay(element) {
+      
+      if(element.value == "none") {
+        map.overlayMapTypes.clear();
+        return;
+      }
+      console.log(element.value)
+
+      var path = "./" + element.value + "/"
+
+      maptiler = new google.maps.ImageMapType({
+       getTileUrl: function(coord, zoom) {
+        // return [path, zoom, '/', coord.x, '/', (Math.pow(2,zoom)-coord.y-1), '.png'].join('');
+        path_ret = [path, zoom, '/', coord.x, '/', coord.y + '.png'].join('');
+        console.log(path_ret)
+        return path_ret;
+       },
+       tileSize: new google.maps.Size(256, 256)
+      });
+      map.overlayMapTypes.clear();
+      map.setMapTypeId('satellite');
+    // map.overlayMapTypes.insertAt(0, maptiler);
+    map.overlayMapTypes.push(maptiler);
+  }
+
+</script>
+
+<script type="text/javascript" src="https://maps.google.com/maps/api/js?key=AIzaSyDxajL9jR2M76DjR6IYOyzvbRZvShtwIFM&sensor=false&callback=init"></script>
+
+</body>
+</html>
