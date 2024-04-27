@@ -1,6 +1,7 @@
 ## Interactive Orthophoto Viewer
 
 This repository provides a web page that allows you to visualize and compare orthophotos (aerial photographs) captured at different times for the same location. You can use radio buttons to switch between the various orthophotos, offering a convenient way to track changes or identify specific features across time.
+Credit to [Dennis Baldwin](https://www.youtube.com/watch?v=J2Ri_QzyOnY). Thanks for you videos !
 
 **Prerequisites:**
 
